@@ -1,0 +1,24 @@
+name: Rust Check
+
+on:
+  push:
+    branches: [ "rust" ]
+  pull_request:
+    branches: [ "rust" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Required Packages
+      run: sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt install libwayland-dev libxkbcommon-dev libudev-dev libinput-dev libgbm-dev libseat-dev libsystemd-dev xorg -y
+    - name: Run Check
+      run: cargo check
+    - name: Run Build
+      run: cargo build --verbose
