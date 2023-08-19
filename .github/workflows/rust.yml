@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install Required Packages
+      run: sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get install libatk1.0-dev -y
     - name: Run Check
       run: cargo check
     - name: Run Build
