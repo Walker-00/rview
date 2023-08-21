@@ -45,7 +45,6 @@ impl App for Rview {
                 }
             }
 
-            println!("{}", self.image_seted);
             Window::new(monospace_text("Rview"))
                 .title_bar(false)
                 .open(&mut self.image_seted.clone())

@@ -6,4 +6,19 @@
 </div>
 
 # rview
-qview in rust
+Rview mean `Rust Image Viewer` which is Rust replacement for `Qview` which is written in `Cpp`.
+This `Rview` is the a part of the project `Project SS`.
+
+## [Features]
+
+- [x] Cross-Platform Support
+- [x] Support Most Popular image formats
+- [x] Support Svg Images
+- [x] Support Webp Images
+- [x] Support image picker
+- [x] Support image from File
+- [x] Support Image from Url
+- [ ] Better Error Handling
+- [ ] Optimize size
+- [ ] Support Multiple Images Open
+- [ ] Cli Features
