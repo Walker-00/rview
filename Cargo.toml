@@ -3,12 +3,16 @@ name = "rview"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+strip = true
+opt-level = 3
+lto = true
+codegen-units = 1
+
 [dependencies]
 eframe = "0.22.0"
-egui_extras = { version = "0.22.0", features = ["image"] }
-futures = "0.3.28"
-image = "0.24.7"
-infer = "0.15.0"
-reqwest = "0.11.18"
+egui_extras = { version = "0.22.0", features = ["image", "svg"] }
+image = {version = "0.24.7", features = ["gif", "jpeg", "ico", "png", "pnm", "tga", "tiff", "webp","bmp", "hdr", "dxt", "dds", "farbfeld", "openexr"]}
+reqwest = { version = "0.11.18", features = ["blocking"] }
 rfd = "0.11.4"
-serde = { version = "1.0.183", features = ["derive"] }
+url = "2.4.0"
