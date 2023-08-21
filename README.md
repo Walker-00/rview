@@ -34,9 +34,26 @@ chmod +x rview
 sudo mv rview /bin # or ln $PWD/rview /bin/rview
 ```
 
+### [Mac]
+
+Follow The [Compile From Source](https://github.com/Walker-00/rview#compile-from-source) Instructions, Cuz I don't know how to cross-compile for mac.
+
 ### [Windows]
 
 just Download [EXE File](https://github.com/Walker-00/rview/releases/download/v0.1.0/rview.exe) and run it
+
+### [Compile From Source]
+
+To Compile From Source You Need To Install:
+
+- [Rustup](https://rustlang.org)
+- [Gtk](https://gtk.org)
+
+```sh
+git clone https://github.com/Walker-00/rview
+cd rview
+cargo install --path .
+```
 
 ## [Voices From Burma]
 As burmeses living in dictatorship is fucking hard.
