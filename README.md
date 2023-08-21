@@ -8,6 +8,8 @@
 # rview
 Rview mean `Rust Image Viewer` which is Rust replacement for `Qview` which is written in `Cpp`.
 <br>
+If `Rview` is a little weird you can call it as `Review`.
+<br>
 This `Rview` is the a part of the project `Project SS`.
 
 ## [Features]
