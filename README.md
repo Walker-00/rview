@@ -21,7 +21,7 @@ This `Rview` is the a part of the project `Project SS`.
 - [x] Support image picker
 - [x] Support image from File
 - [x] Support Image from Url
-- [ ] Better Error Handling
+- [x] Better Error Handling
 - [ ] Optimize size
 - [ ] Support Multiple Images Open
 - [ ] Cli Features
@@ -58,13 +58,10 @@ cargo install --path .
 ```
 
 ## [Voices From Burma]
-As burmeses living in dictatorship is fucking hard.
+Currently, Burma is under the Military rule and as a burmese, living under the dictatorship is extremely chellenging.
 <br>
-We all burmeses are asking for Justice, but all we got are bullets.
+But we stayed strong and are fighting against Military Junta's bullets and violence.
 <br>
-We all burmeses are want our democracy and our leaders back.
+We demand Justice and Democracy.
 <br>
-We all burmeses are fighting back to the Military Junta and Injustice.
-<br>
-As burmeses we really want other countries to join us, but also we still fighting our own.
-
+And we kindly want to ask for the International support and attention.

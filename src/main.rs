@@ -2,11 +2,17 @@ use std::{fs::File, io::Read, path::Path};
 
 use eframe::{
     egui::{self, CentralPanel, ImageButton, RichText, TextStyle, Window},
+    epaint::Color32,
     run_native, App, CreationContext, NativeOptions,
 };
 use egui_extras::RetainedImage;
+use lazy_static::lazy_static;
 use reqwest::header::CONTENT_TYPE;
 use rfd::FileDialog;
+
+lazy_static! {
+    static ref ERRWIN: bool = true;
+}
 
 fn main() {
     let np = NativeOptions::default();
@@ -17,8 +23,9 @@ fn main() {
 struct Rview {
     image_seted: bool,
     image: String,
-    image_bytes: Vec<u8>,
     image_retained: Option<RetainedImage>,
+    errwin: bool,
+    errmsg: String,
 }
 
 impl Rview {
@@ -33,6 +40,14 @@ impl Rview {
 impl App for Rview {
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         CentralPanel::default().show(ctx, |ui| {
+            Window::new(monospace_text("Oops!"))
+                .open(&mut self.errwin)
+                .show(ctx, |ui| {
+                    ui.heading(
+                        monospace_text(format!("Error due To: {}", self.errmsg))
+                            .color(Color32::RED),
+                    );
+                });
             if let Some(image_retained) = &self.image_retained {
                 if ui
                     .add(ImageButton::new(
@@ -77,29 +92,64 @@ impl App for Rview {
                             if ui.button(monospace_text("Open Image")).clicked() {
                                 let mut bytes = vec![];
                                 if url::Url::parse(&self.image).is_ok() {
-                                    bytes = image_req(&self.image).unwrap();
+                                    match image_req(&self.image) {
+                                        Ok(bytess) => bytes = bytess,
+                                        Err(e) => {
+                                            self.errwin = true;
+                                            self.errmsg = e.to_string();
+                                        }
+                                    }
                                 } else if Path::new(&self.image).exists() {
-                                    let mut file = File::open(&self.image).unwrap();
-                                    file.read_to_end(&mut bytes).unwrap();
+                                    match File::open(&self.image) {
+                                        Ok(mut file) => {
+                                            if let Err(e) = file.read_to_end(&mut bytes) {
+                                                self.errwin = true;
+                                                self.errmsg = e.to_string()
+                                            }
+                                        }
+                                        Err(e) => {
+                                            self.errwin = true;
+                                            self.errmsg = e.to_string()
+                                        }
+                                    }
                                 } else {
-                                    todo!()
+                                    self.errwin = true;
+                                    self.errmsg = format!(
+                                        "Your Image `{}`, is invalid Url Or File Path!",
+                                        self.image
+                                    );
                                 }
 
                                 if !bytes.is_empty() {
-                                    self.image_bytes = bytes.clone();
                                     let utf8_bytes = String::from_utf8_lossy(&bytes);
                                     if utf8_bytes.contains("<?xml") || utf8_bytes.contains("<svg") {
-                                        self.image_retained = Some(
-                                            RetainedImage::from_svg_bytes(&self.image, &bytes)
-                                                .unwrap(),
-                                        );
+                                        match RetainedImage::from_svg_bytes(&self.image, &bytes) {
+                                            Ok(image_retained) => {
+                                                self.image_retained = Some(image_retained);
+                                            }
+                                            Err(e) => {
+                                                self.errwin = true;
+                                                self.errmsg = e.to_string();
+                                            }
+                                        }
                                     } else {
-                                        self.image_retained = Some(
-                                            RetainedImage::from_image_bytes(&self.image, &bytes)
-                                                .unwrap(),
-                                        );
+                                        match RetainedImage::from_image_bytes(&self.image, &bytes) {
+                                            Ok(image_retained) => {
+                                                self.image_retained = Some(image_retained);
+                                            }
+                                            Err(e) => {
+                                                self.errwin = true;
+                                                self.errmsg = e.to_string();
+                                            }
+                                        }
                                     }
                                     self.image_seted = false;
+                                } else {
+                                    self.errwin = true;
+                                    self.errmsg = format!(
+                                        "Reading bytes From Your Image `{}` is Error, Maybe image format is not supported?",
+                                        self.image
+                                    );
                                 }
                             }
                         })
@@ -109,18 +159,25 @@ impl App for Rview {
     }
 }
 
-fn image_req(url: &str) -> Result<Vec<u8>, ()> {
-    let resp = reqwest::blocking::get(url).unwrap();
-
-    if let Some(content_type) = resp.headers().get(CONTENT_TYPE) {
-        if content_type.to_str().unwrap().starts_with("image") {
-            let bytes = resp.bytes().unwrap().to_vec();
-            Ok(bytes)
-        } else {
-            Err(())
-        }
-    } else {
-        Err(())
+fn image_req(url: &str) -> Result<Vec<u8>, String> {
+    match reqwest::blocking::get(url) {
+        Ok(resp) => match resp.headers().get(CONTENT_TYPE) {
+            Some(content_type) => match content_type.to_str() {
+                Ok(ctstr) => {
+                    if ctstr.starts_with("image") {
+                        match resp.bytes() {
+                            Ok(bytes) => Ok(bytes.to_vec()),
+                            Err(e) => Err(e.to_string()),
+                        }
+                    } else {
+                        Err("Url is Not Image's Url??".to_string())
+                    }
+                }
+                Err(e) => Err(e.to_string()),
+            },
+            None => Err("Url Is Not Image's Url??".to_string()),
+        },
+        Err(e) => Err(e.to_string()),
     }
 }
 
