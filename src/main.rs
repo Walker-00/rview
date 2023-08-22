@@ -6,7 +6,6 @@ use eframe::{
     run_native, App, CreationContext, NativeOptions,
 };
 use egui_extras::RetainedImage;
-use lazy_static::lazy_static;
 use reqwest::header::CONTENT_TYPE;
 use rfd::FileDialog;
 
