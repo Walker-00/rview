@@ -10,10 +10,6 @@ use lazy_static::lazy_static;
 use reqwest::header::CONTENT_TYPE;
 use rfd::FileDialog;
 
-lazy_static! {
-    static ref ERRWIN: bool = true;
-}
-
 fn main() {
     let np = NativeOptions::default();
     run_native("Rview", np, Box::new(|cc| Box::new(Rview::new(cc)))).unwrap();
