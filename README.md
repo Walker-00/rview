@@ -31,7 +31,7 @@ This `Rview` is the a part of the project `Project SS`.
 ### [Linux]
 
 ```sh
-wget https://github.com/Walker-00/rview/releases/download/v0.1.0/rview
+wget https://github.com/Walker-00/rview/releases/download/v0.1.1/rview
 chmod +x rview
 sudo mv rview /bin # or ln $PWD/rview /bin/rview
 ```
@@ -42,7 +42,7 @@ Follow The [Compile From Source](https://github.com/Walker-00/rview#compile-from
 
 ### [Windows]
 
-just Download [EXE File](https://github.com/Walker-00/rview/releases/download/v0.1.0/rview.exe) and run it
+just Download [EXE File](https://github.com/Walker-00/rview/releases/download/v0.1.1/rview.exe) and run it
 
 ### [Compile From Source]
 
